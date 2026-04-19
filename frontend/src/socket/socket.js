@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-export const socket = io("http://localhost:8000", {
+export const socket = io("https://miniature-toma-aliudufu-dfe931ca.koyeb.app/", {
   reconnection: true,
   reconnectionAttempts: Infinity,   
   reconnectionDelay: 1000,         

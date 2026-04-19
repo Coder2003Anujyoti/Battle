@@ -26,7 +26,7 @@ const navigate = useNavigate()
 const join_room=async()=>{
   if(id.length>0 && name.length>0){
    try {
-    const response = await fetch("http://localhost:8000/join-pokemon-room", {
+    const response = await fetch("https://miniature-toma-aliudufu-dfe931ca.koyeb.app/join-pokemon-room", {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
