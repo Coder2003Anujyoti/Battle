@@ -49,13 +49,13 @@ const send_details=()=>{
 if (!socket.connected) {
     socket.connect(); // ensure connection
   }
-socket.emit("join-gaming-room",{
+socket.emit("join-pokemon-room",{
   name, team:currentTeam, player:currentPlayers, matchID, matchtype, teamone:firstteam, teamtwo:secondteam
 })
   setLock(true)
 }
 const optio=(i)=>{
-socket.emit("gaming-move",{choice:i})
+socket.emit("gaming-pokemon-move",{choice:i})
 clearInterval(countdownInterval.current);
 clearTimeout(inactivityTimeout.current);
   setChoice(i)
@@ -69,22 +69,22 @@ useEffect(()=>{
 socket.on("connect", () => {
   console.log("Connected:", socket.id);
   });
-socket.on("gaming-wait",(m)=>{
+socket.on("pokemon-gaming-wait",(m)=>{
   setMsg(m)
 })
-socket.on("gaming-start",(m)=>{
+socket.on("pokemon-gaming-start",(m)=>{
 setVal(m)
   setMsg("")
   setStart(true)
 })
-socket.on("make-score",(m)=>{
+socket.on("pokemon-make-score",(m)=>{
 if(m.game.result != ""){
 clearInterval(countdownInterval.current);
 clearTimeout(inactivityTimeout.current);
 }
   setVal(m)
 })
-socket.on("gaming-turn",(m)=>{
+socket.on("pokemon-gaming-turn",(m)=>{
 if(m == "Your Turn"){
   setTurn(m)
   setChoice(0)
@@ -97,7 +97,7 @@ else{
  setTimer(0)
 }
 })
-socket.on('gaming-Left',(mseg)=>{
+socket.on('pokemon-gaming-Left',(mseg)=>{
   clearInterval(countdownInterval.current);
   clearTimeout(inactivityTimeout.current);
     setMsg(mseg)

@@ -18,7 +18,7 @@ useEffect(() => {
   if (!socket.connected) {
       socket.connect();
     }
-  socket.on("updated-data",(msg)=>{
+  socket.on("pokemon-updated-data",(msg)=>{
     setVal([msg.user])
   })
 }, []);
@@ -26,7 +26,7 @@ const navigate = useNavigate()
 const join_room=async()=>{
   if(id.length>0 && name.length>0){
    try {
-    const response = await fetch("http://localhost:8000/join-room", {
+    const response = await fetch("http://localhost:8000/join-pokemon-room", {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",

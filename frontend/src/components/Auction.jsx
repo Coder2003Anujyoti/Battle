@@ -22,7 +22,7 @@ const send_name = () => {
     socket.connect(); // ensure connection
   }
 
-  socket.emit("join-room", { name, id });
+  socket.emit("join-auction-room", { name, id });
   setLock(true);
 };
 useEffect(()=>{
@@ -30,10 +30,10 @@ socket.on("connect", () => {
     console.log("Connected:", socket.id);
   });
 
-  socket.on("wait",(m)=>{
+  socket.on("auction-wait",(m)=>{
     setMsg(m.msg)
   })
-socket.on("start-game",(m)=>{
+socket.on("auction-start-game",(m)=>{
 let val=m.players.filter((i)=>i.id==socket.id)
 setPlayer(val)
 setCount(prev => prev + 1)
@@ -48,12 +48,12 @@ setMsg("")
 setLock(false)
 setRoundEnded(false)
 })
-socket.on("timer",(count)=>{
+socket.on("auction-timer",(count)=>{
   if (!roundEnded) {
     setTimer(count)
   }
 })
-socket.on("bid-update",(m)=>{
+socket.on("auction-bid-update",(m)=>{
 let vals=m.room.filter((i)=>i.id==socket.id)
 if (m.bidders[m.bidders.length - 1] === vals[0].name){
 setInfo(prev => [...m.bidders])
@@ -66,7 +66,7 @@ setBid(m.bid)
 setDisable(false)
 }
 })
-socket.on("updates",(m)=>{
+socket.on("auction-updates",(m)=>{
 let val=m.players.filter((i)=>i.id==socket.id)
 setPlayer(val)
 setData(prev => {
@@ -75,7 +75,7 @@ setData(prev => {
 })
 setInfo(prev => [...m.data.bidders])
 })
-socket.on("round-end",(m)=>{
+socket.on("auction-round-end",(m)=>{
 setRoundEnded(true)
 setSubtimer(prev => {
   if (prev === m.nextIn) return prev
@@ -83,12 +83,11 @@ setSubtimer(prev => {
 })
 setTimer(0)
 })
-socket.on("final-updates",(m,ack)=>{
+socket.on("auction-final-updates",(m,ack)=>{
 setAll(m.players)
 ack()
-sessionStorage.setItem("auction-completed", JSON.stringify(true));
 })
-socket.on("Left",(m)=>{
+socket.on("auction-Left",(m)=>{
 setMsg(m)
 setPlayer([])
 })
@@ -179,7 +178,7 @@ socket.disconnect()
         <div className="flex justify-center items-center gap-6 my-8">
           <button
             onClick={() => {
-              socket.emit("move-bid", {
+              socket.emit("move-auction-bid", {
                 name: player[0]?.name,
                 id: player[0]?.roomID
               })

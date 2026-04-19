@@ -20,7 +20,7 @@ const navigate = useNavigate()
 const adds_room=async()=>{
  if(createid.length>0 && createpswd.length>0 ){
    try {
-    const response = await fetch("http://localhost:8000/add-room", {
+    const response = await fetch("http://localhost:8000/add-pokemon-room", {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const adds_room=async()=>{
  const deletes_room=async()=>{
  if(deleteid.length>0 && deletepswd.length>0){
    try {
-    const response = await fetch("http://localhost:8000/delete-room", {
+    const response = await fetch("http://localhost:8000/delete-pokemon-room", {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +83,7 @@ const adds_room=async()=>{
  const joins_room=async()=>{
   if(joinid.length>0 && joinname.length>0){
    try {
-    const response = await fetch("http://localhost:8000/join-room", {
+    const response = await fetch("http://localhost:8000/join-pokemon-room", {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",
