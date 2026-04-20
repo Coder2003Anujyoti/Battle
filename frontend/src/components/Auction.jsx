@@ -115,7 +115,7 @@ socket.disconnect()
   {msg}
  </p>
 
-      {msg !== "Waiting for others....." && (
+      {msg !== "Waiting for others....." && msg !== "Auction already completed..." && (
         <div className="text-black my-12 font-bold flex flex-col justify-center items-center">
           <button
             onClick={() => window.location.reload()}
@@ -125,6 +125,27 @@ socket.disconnect()
           </button>
         </div>
       )}
+    {
+      msg == "Auction already completed..." &&
+      (
+        <div className="text-black my-12 font-bold flex flex-col justify-center items-center">
+          <button
+            onClick={()=>{
+    navigate("/page", {
+  state: {
+    id,
+    name,
+    teams:[]
+  }
+});
+  }} 
+            className="px-6 py-3 text-white font-semibold rounded-xl shadow-md transition-all duration-300 bg-sky-700 hover:scale-105"
+          >
+            Go Back
+          </button>
+        </div>
+      )
+    }
   </div>
     </>
   )

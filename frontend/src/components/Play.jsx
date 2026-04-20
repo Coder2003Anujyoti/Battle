@@ -13,6 +13,7 @@ const [timer,setTimer]=useState(20)
 const inactivityTimeout = useRef(null);
 const countdownInterval = useRef(null);
 const buttons=[1,2,3,4,5,6]
+const navigate = useNavigate()
 const { matchID,matchtype,name,firstname,secondname,firstteam,secondteam,firstplayers,secondplayers } = location.state;
 const teamicons=[{team:"Yoddhas",image:"Icons/Yoddhas Icon.webp"},{team:"Titans",image:"Icons/Titans Icon.webp"},{team:"Giants",image:"Icons/Giants Icon.webp"},{team:"Thalaivas",image:"Icons/Thalaivas Icon.webp"}]
 const isFirst = name === firstname;
@@ -66,6 +67,9 @@ useEffect(() => {
   }
 }, [start, turn]);
 useEffect(()=>{
+if (!socket.connected) {
+    socket.connect(); // ensure connection
+  }
 socket.on("connect", () => {
   console.log("Connected:", socket.id);
   });
@@ -114,8 +118,20 @@ socket.on('pokemon-gaming-Left',(mseg)=>{
 { msg!= "" && 
 <div className="text-center text-md flex flex-col gap-4 justify-center items-center font-bold my-44 text-black font-bold">
 <h1>{msg}</h1>
-{ msg != 'Waiting for another player...' &&
+{ msg != 'Waiting for another player...' && msg != "Match already finished..." &&
 <button className="w-28 py-2 my-6 px-2 flex justify-center items-center bg-sky-700 text-white rounded-md font-bold" onClick={()=>window.location.reload()}>Restart</button>}
+{
+  msg == "Match already finished..." &&
+<button className="w-28 py-2 my-6 px-2 flex justify-center items-center bg-sky-700 text-white rounded-md font-bold" onClick={()=>{
+    navigate("/page", {
+  state: {
+    id:matchID,
+    name,
+    teams:[]
+  }
+});
+  }} >Go Back</button>
+}
 </div>
 }
 {
@@ -269,6 +285,33 @@ return(<>
         Restart
       </button>
     }
+{
+  val.game.result != "Match is Tied" &&
+    <div className="flex flex-col justify-center items-center my-4 gap-5">
+<p className="text-center font-bold text-black">Top Performers</p>
+<div className="flex flex-row flex-wrap gap-4 justify-center items-center">
+{
+  val.players
+  .flatMap(i => i.player.map(player => ({
+    ...player,
+    team: i.team
+  })))
+  .slice()
+  .sort((a, b) => (b.runs + b.wickets) - (a.runs + a.wickets))
+  .map((i, ind) => {
+    if (ind < 3)
+      return (
+        <div key={ind} className="flex flex-col justify-center items-center bg-sky-700 text-white font-bold rounded-md px-3 py-4 gap-2">
+          <img src={i.image} className="w-20 h-20" />
+          <p>{i.name}</p>
+          <img src={teamicons.find(it => it.team == i.team)?.image} className="w-12 h-12" />
+        </div>
+      );
+  })
+}
+</div>
+  </div>
+}
 
   </div>
 }
